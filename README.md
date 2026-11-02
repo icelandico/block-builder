@@ -44,7 +44,7 @@ Layers import only downward (`app` → `pages` → `widgets` → `features` →
 ## Roadmap
 
 - [x] Phase 1 — Skeleton: chooser screen, planner shell, FSD folders
-- [ ] Phase 2 — Konva grid board: pan/zoom, grid resize
+- [x] Phase 2 — Konva grid board: pan/zoom, grid resize
 - [ ] Phase 3 — Zeus building catalog (data model)
 - [ ] Phase 4 — Placement flow: ghost preview, R-rotate, road drag-drawing, bulldoze
 - [ ] Phase 5 — Save/Load/Share: versioned Zod JSON schema, localStorage autosave

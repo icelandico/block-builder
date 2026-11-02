@@ -12,10 +12,20 @@ npm run lint     # oxlint (config: .oxlintrc.json)
 npm run build    # tsc -b && vite build — this IS the typecheck; there is no separate one
 ```
 
-- No test runner configured yet (Vitest, Zod, and Konva are listed in the README
-  but not installed — they arrive with roadmap phases 2–5). Don't assume they exist.
-- Project is currently Phase 1 (skeleton): many `src/*` folders are placeholder
-  stubs with roadmap comments — keep their doc-comments intact.
+- No test runner configured yet (Vitest and Zod arrive with roadmap phases 3–5;
+  don't assume they exist). Konva + react-konva are installed since Phase 2.
+- Project is currently Phase 2 (Konva board done): the remaining `src/*` stubs
+  (features/place-building, save-layout, …, shared/persistence) have roadmap
+  comments — keep their doc-comments intact.
+
+## Git
+
+- When creating branch use following convention: `{type}/{description}`. There could be following branch types:
+  - feature - for new functionalities
+  - fix - for fixing current functionalities, changing phrases, translations
+  - docs - updating files such as README, AGENTS or other that will be created in this project
+  - chore - updating libraries in packages.json, parts of code not connected with business logic, styles, application appearance
+  - style - changes that regard only css, colors, layout
 
 ## Feature Sliced Design (FSD) + aliases
 
@@ -36,6 +46,13 @@ npm run build    # tsc -b && vite build — this IS the typecheck; there is no s
 - No router: navigation is a Zustand `useViewStore` switch in `app/model/view-store.ts`.
 - Architecture rule: board/domain stores stay headless (pure data, no Konva/canvas
   deps) so canvas rendering is only a view of the state.
+- Board rendering: `widgets/board` renders a Konva `Stage` with three layers
+  (static grid, buildings, interaction); pan/zoom lives in `shared/camera`
+  (camera store), tile-to-pixel math in `shared/konva-helpers` (`TILE`). The
+  Stage fills its container (ResizeObserver) and is draggable for panning.
+- Pages compose widgets via `PlannerLayout` slots (sidebar/toolbar/board) —
+  widgets never import other widgets.
 - Tailwind v4 is config-less (CSS-first): theme tokens/variables live in
   `src/index.css`. shadcn/ui CLI config is `components.json` (aliases → `@shared/ui`,
   utils → `@shared/lib/utils`); add new shadcn components under `src/shared/ui/`.
+  A `TooltipProvider` wraps the app in `src/app/index.tsx`.
