@@ -1,3 +1,2 @@
-/**
- * Phase 2 — stub for the "grid resize" feature (width/height controls).
- */
+export { GridSizeControls } from "./ui/grid-size-controls";
+export { parseDraft } from "./model/grid-size-draft";

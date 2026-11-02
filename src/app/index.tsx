@@ -1,5 +1,6 @@
 import { ChooserPage } from "@pages/chooser";
 import { PlannerPage } from "@pages/planner";
+import { TooltipProvider } from "@shared/ui";
 import { useViewStore } from "./model/view-store";
 
 const App = () => {
@@ -8,11 +9,15 @@ const App = () => {
   const chooseGame = useViewStore((s) => s.chooseGame);
   const backToChooser = useViewStore((s) => s.backToChooser);
 
-  if (view === "planner" && selectedGameId) {
-    return <PlannerPage gameId={selectedGameId} onBack={backToChooser} />;
-  }
-
-  return <ChooserPage onChooseGame={chooseGame} />;
+  return (
+    <TooltipProvider delayDuration={200}>
+      {view === "planner" && selectedGameId ? (
+        <PlannerPage gameId={selectedGameId} onBack={backToChooser} />
+      ) : (
+        <ChooserPage onChooseGame={chooseGame} />
+      )}
+    </TooltipProvider>
+  );
 };
 
 export { App };

@@ -1,4 +1,5 @@
-/**
- * Viewport utilities for the Konva board (pan/zoom camera state).
- * Implemented in Phase 2 — Grid + Canvas (Konva).
- */
+export {
+  useCameraStore,
+  MIN_ZOOM,
+  MAX_ZOOM,
+} from "./model/camera-store";
