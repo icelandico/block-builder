@@ -21,6 +21,7 @@ npm install
 npm run dev      # start dev server
 npm run build    # type-check + production build
 npm run lint     # oxlint
+npm run test     # vitest (run once); test:watch for watch mode
 ```
 
 ## Structure (Feature Sliced Design)
@@ -32,7 +33,8 @@ src/
   widgets/    # composed UI blocks (planner layout shell, ...)
   features/   # user interactions: place/move/select/bulldoze/rotate,
               # save-layout, load-layout, grid-resize (later phases)
-  entities/   # domain: game catalog metadata, board state
+  entities/   # domain: game catalog metadata, building catalogs (BuildingDef,
+            # ZEUS_CATALOG), board state
   shared/     # reusable, domain-unware code: ui (shadcn), lib, camera,
               # konva-helpers, persistence
 ```
@@ -45,7 +47,7 @@ Layers import only downward (`app` → `pages` → `widgets` → `features` →
 
 - [x] Phase 1 — Skeleton: chooser screen, planner shell, FSD folders
 - [x] Phase 2 — Konva grid board: pan/zoom, grid resize
-- [ ] Phase 3 — Zeus building catalog (data model)
+- [x] Phase 3 — Zeus building catalog (data model, `entities/building`)
 - [ ] Phase 4 — Placement flow: ghost preview, R-rotate, road drag-drawing, bulldoze
 - [ ] Phase 5 — Save/Load/Share: versioned Zod JSON schema, localStorage autosave
 - [ ] Later — Publish & browse blocks (Supabase), other games' catalogs
