@@ -26,6 +26,8 @@ interface PlacedBuildingsState {
   place: (defId: string, x: number, y: number, rot: Rotation, tiles: Tile[]) => string;
   update: (id: string, patch: Partial<Omit<BuildingInstance, "id" | "defId">>) => void;
   remove: (id: string) => void;
+  /** Remove every placed building at once (clear-all). */
+  clearAll: () => void;
 
   select: (id: string | null) => void;
 }
@@ -62,6 +64,8 @@ export const usePlacedBuildingsStore = create<PlacedBuildingsState>()(
         items: state.items.filter((item) => item.id !== id),
         selectedId: state.selectedId === id ? null : state.selectedId,
       })),
+
+    clearAll: () => set({ items: [], selectedId: null }),
 
     select: (id) =>
       set((state) => ({
