@@ -60,6 +60,17 @@ describe("placed buildings store", () => {
     expect(item.defId).toBe("zeus_granary");
   });
 
+  it("clearAll removes everything and drops the selection", () => {
+    const placed = usePlacedBuildingsStore.getState();
+    placed.place("zeus_park", 0, 0, 0, [{ x: 0, y: 0 }]);
+    const id = placed.place("zeus_road", 1, 0, 0, [{ x: 1, y: 0 }]);
+    placed.select(id);
+    placed.clearAll();
+    const state = usePlacedBuildingsStore.getState();
+    expect(state.items).toHaveLength(0);
+    expect(state.selectedId).toBeNull();
+  });
+
   it("select only accepts known items", () => {
     const placed = usePlacedBuildingsStore.getState();
     const id = placed.place("zeus_park", 0, 0, 0, [{ x: 0, y: 0 }]);

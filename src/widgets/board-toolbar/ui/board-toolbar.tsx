@@ -10,6 +10,7 @@ import { useBulldozeStore } from "@features/bulldoze";
 import { useBuildingInfoStore } from "@features/building-info";
 import { usePlaceBuildingStore } from "@features/place-building";
 import { GridSizeControls } from "@features/grid-resize";
+import { ClearAllButton } from "./clear-all-button";
 
 const StyledToolbarButton = ({
   label,
@@ -114,6 +115,8 @@ const BoardToolbar = () => {
           </TooltipTrigger>
           <TooltipContent>{bulldozeEnabled ? "Bulldoze active" : "Bulldoze tool"}</TooltipContent>
         </Tooltip>
+
+        <ClearAllButton />
 
         <Separator orientation="vertical" className="mx-1 h-6" />
         <StyledToolbarButton
