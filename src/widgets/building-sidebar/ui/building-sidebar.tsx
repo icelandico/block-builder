@@ -1,4 +1,4 @@
-import { useState, type SyntheticEvent } from "react";
+import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import {
   CATEGORIES,
@@ -56,8 +56,8 @@ const BuildingSidebar = ({ gameId }: BuildingSidebarProps) => {
     usePlaceBuildingStore.getState().setPending(def.id);
   };
 
-  const onToggleGroup = (group: CategoryGroup, event: SyntheticEvent<HTMLDetailsElement>) => {
-    setExpanded(event.currentTarget.open ? group.category : null);
+  const onToggleGroup = (group: CategoryGroup) => {
+    setExpanded((current) => (current === group.category ? null : group.category));
   };
 
   return (
@@ -77,9 +77,18 @@ const BuildingSidebar = ({ gameId }: BuildingSidebarProps) => {
             key={group.category}
             className="mb-1 border-b border-border/60 last:mb-3"
             open={expanded === group.category}
-            onToggle={(event) => onToggleGroup(group, event)}
           >
-            <summary className="group flex cursor-pointer select-none list-none items-center justify-between py-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground [&::-webkit-details-marker]:hidden">
+            <summary
+              className="group flex cursor-pointer select-none list-none items-center justify-between py-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground [&::-webkit-details-marker]:hidden"
+              // Prevent the native details toggle: `open` is fully controlled
+              // by React state, and the browser's async `toggle` events would
+              // otherwise race with it (closing the previously open section
+              // nulls the state, so a newly clicked section never opens).
+              onClick={(event) => {
+                event.preventDefault();
+                onToggleGroup(group);
+              }}
+            >
               {group.category}
               <ChevronDown className="size-3.5 transition-transform group-open:rotate-180" />
             </summary>
