@@ -25,7 +25,7 @@ const GridBackground = () => {
           sceneFunc={(ctx, shape) => {
             ctx.save();
             ctx.lineWidth = 1 / TILE; // compensate camera scale: keep 1px on screen
-            ctx.strokeStyle = "#d8cbab";
+            ctx.strokeStyle = "#3c1365";
 
             ctx.beginPath();
             for (let i = 0; i <= width; i++) {
@@ -49,7 +49,7 @@ const GridBackground = () => {
         y={0}
         width={boardPxW}
         height={boardPxH}
-        stroke="#8a7f63"
+        stroke="#29094a"
         strokeWidth={2 / TILE}
         listening={false}
       />
