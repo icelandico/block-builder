@@ -1,5 +1,6 @@
 import type { GameId } from "@entities/game";
 import type { BuildingDef } from "./building";
+import { ZEUS_CATEGORIES } from "./zeus-categories";
 import { ZEUS_CATALOG } from "./zeus";
 
 /**
@@ -21,6 +22,14 @@ export interface CategoryGroup {
 }
 
 export const getCatalog = (gameId: GameId): readonly BuildingDef[] => CATALOGS[gameId];
+
+/** Per-game build-menu category order (sidebar display order). */
+export const CATEGORIES: Record<GameId, readonly string[]> = {
+  zeus: ZEUS_CATEGORIES,
+  caesar3: [],
+  pharaoh: [],
+  emperor: [],
+};
 
 /** Find a building by its id, or `undefined` for unknown ids. */
 export const getBuilding = (
@@ -57,7 +66,15 @@ export const groupByCategory = (
   return result;
 };
 
-/** Case-insensitive substring search over names and ids (sidebar filter, Phase 4). */
+/** Find a def by id across every game catalog (def ids are globally unique). */export const getDef = (defId: string): BuildingDef | undefined => {
+  for (const catalog of Object.values(CATALOGS)) {
+    const def = getBuilding(catalog, defId);
+    if (def) return def;
+  }
+  return undefined;
+};
+
+/** Case-insensitive substring search over names and ids (sidebar filter). */
 export const searchBuildings = (
   catalog: readonly BuildingDef[],
   query: string,

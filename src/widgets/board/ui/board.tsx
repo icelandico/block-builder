@@ -2,13 +2,22 @@ import { useEffect, useRef } from "react";
 import type Konva from "konva";
 import type { KonvaEventObject } from "konva/lib/Node";
 import { Layer, Stage } from "react-konva";
-import { useBoardStore } from "@entities/board";
+import { useBoardStore, usePlacedBuildingsStore } from "@entities/board";
+import { useBulldozeStore } from "@features/bulldoze";
+import { GhostPreview, usePlacementEvents, usePlaceBuildingStore } from "@features/place-building";
 import { useCameraStore } from "@shared/camera";
 import { tilesToPx } from "@shared/konva-helpers";
 import { useContainerSize } from "../model/use-container-size";
+import { BuildingsLayer } from "./buildings-layer";
 import { GridBackground } from "./grid-layer";
 
 const WHEEL_ZOOM_STEP = 1.15;
+
+/**
+ * Interaction mode of the board: placement and bulldoze take over the pointer
+ * (and disable Stage panning); otherwise the stage is draggable as before.
+ */
+type BoardMode = "interact" | "placing" | "bulldoze";
 
 const Board = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -25,6 +34,12 @@ const Board = () => {
   const setPan = useCameraStore((s) => s.setPan);
   const zoomAt = useCameraStore((s) => s.zoomAt);
   const centerBoard = useCameraStore((s) => s.centerBoard);
+
+  const isPlacing = usePlaceBuildingStore((s) => s.pending !== null);
+  const bulldoze = useBulldozeStore((s) => s.enabled);
+  const mode: BoardMode = isPlacing ? "placing" : bulldoze ? "bulldoze" : "interact";
+  const events = usePlacementEvents(stageRef);
+  const select = usePlacedBuildingsStore((s) => s.select);
 
   // Stage sized to the container; fit-center the board once on first measure.
   const centeredRef = useRef(false);
@@ -50,6 +65,13 @@ const Board = () => {
     }
   };
 
+  // Clicks on empty board space (grid layers are non-listening) clear the selection.
+  const handleClick = (event: KonvaEventObject<MouseEvent>) => {
+    if (event.target === event.target.getStage() && mode !== "placing") {
+      select(null);
+    }
+  };
+
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden">
       <Stage
@@ -60,20 +82,31 @@ const Board = () => {
         y={cameraY}
         scaleX={cameraZoom}
         scaleY={cameraZoom}
-        draggable
+        draggable={mode === "interact"}
+        style={{ cursor: mode === "interact" ? "grab" : "crosshair" }}
         onWheel={handleWheel}
         onDragEnd={handleDragEnd}
+        onClick={handleClick}
+        onMouseDown={events.onMouseDown}
+        onMouseMove={events.onMouseMove}
+        onMouseUp={events.onMouseUp}
+        onMouseLeave={events.onMouseLeave}
+        onContextMenu={events.onContextMenu}
       >
         {/* Static: background, grid lines, border — redraws only on grid resize */}
         <Layer listening={false}>
           <GridBackground />
         </Layer>
 
-        {/* Placed buildings (Phase 3) */}
-        <Layer />
+        {/* Placed buildings — interactive only in select/bulldoze modes */}
+        <Layer listening={mode !== "placing"}>
+          <BuildingsLayer bulldoze={mode === "bulldoze"} />
+        </Layer>
 
-        {/* Interaction: ghost preview, selection outlines, hover (Phase 4) */}
-        <Layer />
+        {/* Pending placement ghost (phase 4) — pointer events pass through */}
+        <Layer listening={false}>
+          <GhostPreview />
+        </Layer>
       </Stage>
     </div>
   );

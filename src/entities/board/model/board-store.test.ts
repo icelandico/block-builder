@@ -6,6 +6,7 @@ describe("board store grid clamping", () => {
     useBoardStore.setState({
       width: GRID_START.width,
       height: GRID_START.height,
+      showGrid: true,
     });
   });
 
@@ -28,5 +29,22 @@ describe("board store grid clamping", () => {
     expect(height).toBe(GRID_MAX);
     expect(GRID_MIN).toBe(10);
     expect(GRID_MAX).toBe(200);
+  });
+});
+
+describe("board store grid visibility toggle", () => {
+  beforeEach(() => {
+    useBoardStore.setState({ showGrid: true });
+  });
+
+  it("starts with the grid visible", () => {
+    expect(useBoardStore.getState().showGrid).toBe(true);
+  });
+
+  it("toggles the grid on and off", () => {
+    useBoardStore.getState().toggleShowGrid();
+    expect(useBoardStore.getState().showGrid).toBe(false);
+    useBoardStore.getState().toggleShowGrid();
+    expect(useBoardStore.getState().showGrid).toBe(true);
   });
 });

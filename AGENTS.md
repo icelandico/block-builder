@@ -12,11 +12,12 @@ npm run lint     # oxlint (config: .oxlintrc.json)
 npm run build    # tsc -b && vite build — this IS the typecheck; there is no separate one
 ```
 
-- No test runner configured yet (Vitest and Zod arrive with roadmap phases 3–5;
-  don't assume they exist). Konva + react-konva are installed since Phase 2.
-- Project is currently Phase 2 (Konva board done): the remaining `src/*` stubs
-  (features/place-building, save-layout, …, shared/persistence) have roadmap
-  comments — keep their doc-comments intact.
+- Vitest is configured (since Phase 3 — run `npm run test`); Zod arrives in
+  Phase 5. Konva + react-konva are installed since Phase 2.
+- Project is at Phase 4 (placement flow done): the remaining `src/*` stubs
+  (`features/move-building`, Phase 5's `save-layout`, `load-layout`,
+  `shared/persistence`) have roadmap comments — keep their doc-comments intact
+  until they are implemented.
 
 ## Git
 
