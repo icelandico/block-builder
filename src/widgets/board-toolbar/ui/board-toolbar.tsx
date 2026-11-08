@@ -1,4 +1,4 @@
-import { FolderOpen, Hammer, Maximize2, Save, ZoomIn, ZoomOut } from "lucide-react";
+import { FolderOpen, Grid3x3, Hammer, Maximize2, Save, ZoomIn, ZoomOut } from "lucide-react";
 import { useBoardStore } from "@entities/board";
 import { useCameraStore } from "@shared/camera";
 import { tilesToPx } from "@shared/konva-helpers";
@@ -28,6 +28,8 @@ const StyledToolbarButton = ({
 const BoardToolbar = () => {
   const gridW = useBoardStore((s) => s.width);
   const gridH = useBoardStore((s) => s.height);
+  const showGrid = useBoardStore((s) => s.showGrid);
+  const toggleShowGrid = useBoardStore((s) => s.toggleShowGrid);
   const zoomOut = useCameraStore((s) => s.zoomAt);
   const centerBoard = useCameraStore((s) => s.centerBoard);
   const bulldozeEnabled = useBulldozeStore((s) => s.enabled);
@@ -67,6 +69,15 @@ const BoardToolbar = () => {
         </StyledToolbarButton>
 
         <Separator orientation="vertical" className="mx-1 h-6" />
+
+        <StyledToolbarButton
+          label={showGrid ? "Hide grid" : "Show grid"}
+          variant={showGrid ? "secondary" : "ghost"}
+          aria-pressed={showGrid}
+          onClick={toggleShowGrid}
+        >
+          <Grid3x3 className="size-4" />
+        </StyledToolbarButton>
 
         <Tooltip>
           <TooltipTrigger asChild>

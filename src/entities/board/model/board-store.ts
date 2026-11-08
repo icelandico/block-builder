@@ -4,8 +4,11 @@ export interface BoardState {
   /** Grid dimensions in tiles. */
   width: number;
   height: number;
+  /** Whether the tile grid lines are drawn on the board (display toggle). */
+  showGrid: boolean;
 
   setGridSize: (width: number, height: number) => void;
+  toggleShowGrid: () => void;
 }
 
 /** Tile limits — sensible bounds for planners, adjustable in Phase 2 UI. */
@@ -21,9 +24,12 @@ export const GRID_START = { width: 40, height: 40 } as const;
 export const useBoardStore = create<BoardState>()((set) => ({
   width: GRID_START.width,
   height: GRID_START.height,
+  showGrid: true,
   setGridSize: (width, height) =>
     set({
       width: Math.min(GRID_MAX, Math.max(GRID_MIN, width)),
       height: Math.min(GRID_MAX, Math.max(GRID_MIN, height)),
     }),
+  toggleShowGrid: () =>
+    set((state) => ({ showGrid: !state.showGrid })),
 }));
