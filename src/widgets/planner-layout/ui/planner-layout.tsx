@@ -18,7 +18,7 @@ interface PlannerLayoutProps {
  */
 const PlannerLayout = ({ gameId, gameTitle, onBack, sidebar, toolbar, board }: PlannerLayoutProps) => {
   return (
-    <div className="flex min-h-svh flex-col">
+    <div className="flex h-svh flex-col overflow-hidden">
       <header className="flex h-12 shrink-0 items-center gap-3 border-b bg-background px-3">
         <Button variant="ghost" size="icon" aria-label="Back to game chooser" onClick={onBack}>
           <ArrowLeft className="size-5" />
