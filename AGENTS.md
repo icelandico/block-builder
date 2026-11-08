@@ -28,6 +28,8 @@ npm run build    # tsc -b && vite build — this IS the typecheck; there is no s
   - chore - updating libraries in packages.json, parts of code not connected with business logic, styles, application appearance
   - style - changes that regard only css, colors, layout
 
+- NEVER commit or push without the user's explicit approval. Ask first about staging, committing and pushing, and wait for a clear "yes" before running any git commit or push.
+
 ## Feature Sliced Design (FSD) + aliases
 
 - Layers: `app` → `pages` → `widgets` → `features` → `entities` → `shared`.
