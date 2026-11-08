@@ -4,12 +4,14 @@ import type { KonvaEventObject } from "konva/lib/Node";
 import { Layer, Stage } from "react-konva";
 import { useBoardStore, usePlacedBuildingsStore } from "@entities/board";
 import { useBulldozeStore } from "@features/bulldoze";
+import { useBuildingInfoStore } from "@features/building-info";
 import { GhostPreview, usePlacementEvents, usePlaceBuildingStore } from "@features/place-building";
 import { useCameraStore } from "@shared/camera";
 import { tilesToPx } from "@shared/konva-helpers";
 import { useContainerSize } from "../model/use-container-size";
 import { BuildingsLayer } from "./buildings-layer";
 import { GridBackground } from "./grid-layer";
+import { InfoTooltip } from "./info-tooltip";
 
 const WHEEL_ZOOM_STEP = 1.15;
 
@@ -38,6 +40,10 @@ const Board = () => {
   const isPlacing = usePlaceBuildingStore((s) => s.pending !== null);
   const bulldoze = useBulldozeStore((s) => s.enabled);
   const mode: BoardMode = isPlacing ? "placing" : bulldoze ? "bulldoze" : "interact";
+  // Hover inspection (Info button off) switches the cursor to the info cursor.
+  const inspecting = useBuildingInfoStore((s) => s.hoveredId !== null);
+  const cursor =
+    mode === "interact" ? (inspecting ? "help" : "grab") : "crosshair";
   const events = usePlacementEvents(stageRef);
   const select = usePlacedBuildingsStore((s) => s.select);
 
@@ -83,7 +89,7 @@ const Board = () => {
         scaleX={cameraZoom}
         scaleY={cameraZoom}
         draggable={mode === "interact"}
-        style={{ cursor: mode === "interact" ? "grab" : "crosshair" }}
+        style={{ cursor }}
         onWheel={handleWheel}
         onDragEnd={handleDragEnd}
         onClick={handleClick}
@@ -101,6 +107,7 @@ const Board = () => {
         {/* Placed buildings — interactive only in select/bulldoze modes */}
         <Layer listening={mode !== "placing"}>
           <BuildingsLayer bulldoze={mode === "bulldoze"} />
+          <InfoTooltip />
         </Layer>
 
         {/* Pending placement ghost (phase 4) — pointer events pass through */}
